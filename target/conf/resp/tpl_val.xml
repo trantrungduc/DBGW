@@ -1,0 +1,11 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.d.org/">
+   <soapenv:Body>
+        <PPMessageResponse>
+          	<ResultCode>0</ResultCode>
+			<ResultDesc>Success</ResultDesc>
+			<TranID>$trace_id</TranID>
+			<ServiceType>$serviceType</ServiceType>
+			<Result>$result</Result>
+        </PPMessageResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

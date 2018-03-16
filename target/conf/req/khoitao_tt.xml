@@ -1,0 +1,33 @@
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ins="http://soa.comptel.com/2011/02/instantlink">
+   <soap:Header>
+      <wsse:Security soap:mustUnderstand="true" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+         <wsse:UsernameToken wsu:Id="SOAI_req_SOAI" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+            <wsse:Username>bss</wsse:Username>
+            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">client</wsse:Password>
+         </wsse:UsernameToken>
+      </wsse:Security>
+   </soap:Header>
+   <soap:Body>
+   	<ins:CreateRequest>
+		<ins:RequestHeader>
+			<ins:NeType>BST</ins:NeType>
+			<ins:OrderNo>$tran_id</ins:OrderNo>
+			<ins:Priority>3</ins:Priority>
+			<ins:ReqUser>sps_test</ins:ReqUser>
+		</ins:RequestHeader>
+		<ins:RequestParameters>
+			<ins:Parameter name="PRODUCT_NAME" value="$loai_tb"/>
+			<ins:Parameter name="ITEM_TYPE" value="Product"/>
+			<ins:Parameter name="ZTE_ALGORITHM" value="1"/>
+			<ins:Parameter name="SECVER" value="$secver"/>
+			<ins:Parameter name="KEYID" value="$keyid"/>
+			<ins:Parameter name="MSISDN1" value="$msisdn"/>
+			<ins:Parameter name="IMSI1" value="$imsi"/>
+			<ins:Parameter name="KI" value="$ki"/>
+			<ins:Parameter name="NOTE" value="$note"/>
+			<ins:Parameter name="PROVINE" value="$province"/>
+			<ins:Parameter name="SPR_USER" value="sps_test"/>
+		</ins:RequestParameters>
+	</ins:CreateRequest>
+   </soap:Body>
+</soap:Envelope>

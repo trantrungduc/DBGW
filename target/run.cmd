@@ -1,0 +1,1 @@
+java -Dfile.encoding=UTF-8 -classpath "lib/*" -Dlog4j.configuration=file:conf/log4j.properties org.d.sps.DBGW

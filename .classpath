@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="target/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-configuration-1.9.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-io-2.3.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-pool-1.6.jar"/>
+	<classpathentry kind="lib" path="target/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/evictor-1.0.0.jar"/>
+	<classpathentry kind="lib" path="target/lib/grizzly-http-all-2.3.21.jar"/>
+	<classpathentry kind="lib" path="target/lib/httpasyncclient-4.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/httpclient-4.4.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/httpcore-nio-4.4.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/httpmime-4.4.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/jaxen-1.1.6.jar"/>
+	<classpathentry kind="lib" path="target/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="target/lib/mongo-java-driver-3.4.2.jar"/>
+	<classpathentry kind="lib" path="target/lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="target/lib/velocity-1.7.jar"/>
+	<classpathentry kind="lib" path="target/lib/quartz-2.2.3.jar"/>
+	<classpathentry kind="lib" path="target/lib/quartz-jobs-2.2.3.jar"/>
+	<classpathentry kind="lib" path="target/lib/guava-21.0.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-codec-1.8.jar"/>
+	<classpathentry kind="lib" path="target/lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="target/lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="target/lib/jasypt-1.9.2.jar"/>
+	<classpathentry kind="lib" path="target/lib/groovy-2.4.3.jar"/>
+	<classpathentry kind="lib" path="target/lib/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="target/lib/metadata-extractor-2.10.1.jar"/>
+	<classpathentry kind="lib" path="target/lib/commons-net-3.5.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

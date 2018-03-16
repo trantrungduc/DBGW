@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.d.org/">
+   <soapenv:Body>
+    <PPMessageResponse>
+		<ResultCode>exception</ResultCode>
+		<ResultDesc>$result</ResultDesc>
+	</PPMessageResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

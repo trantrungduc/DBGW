@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="PPWebSvService" targetNamespace="http://soap.d.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://soap.d.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:documentation>Service: PPWebSvService
+    Version: 1.0
+    Owner: Tran Trung Duc (trantrungduc@vnpt.vn) - TT CNTT - VNPT NET</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://soap.d.org/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="PPMessage" type="tns:PPMessage"/>
+      <xs:element name="PPMessageResponse" type="tns:PPMessageResponse"/>
+      <xs:complexType name="PPMessage">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="PPHeader" type="tns:PPHeaderType"/>
+          <xs:element minOccurs="1" maxOccurs="1" name="PPBody" type="tns:PPDataType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="PPHeaderType">
+        <xs:sequence>
+          <xs:element name="UserID" type="xs:string"/>
+          <xs:element name="Password" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TranID">
+        <xs:restriction base="xs:string">
+          <xs:length fixed="true" value="14"/>
+          <xs:pattern value="[0-9]*"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="PPDataType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="TEST_QUERY" type="tns:TEST_QUERY"/>
+          <xs:element minOccurs="0" name="TEST_VALUE" type="tns:TEST_VALUE"/>
+          <xs:element minOccurs="0" name="TEST_CURSOR" type="tns:TEST_CURSOR"/>
+          <xs:element minOccurs="0" name="TEST_UPDATE" type="tns:TEST_UPDATE"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TEST_QUERY">
+        <xs:documentation>Service type is QUERY</xs:documentation>
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="TEST_VALUE">
+        <xs:documentation>Service type is VALUE</xs:documentation>
+        <xs:sequence>
+          <xs:element name="USER_ID" type="xs:string"/>
+          <xs:element name="MA_TINH" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TEST_CURSOR">
+        <xs:documentation>Service type is CURSOR</xs:documentation>
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="TEST_UPDATE">
+        <xs:documentation>Service type is UPDATE</xs:documentation>
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="CellType">
+        <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="name" type="xs:string"/>
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="RowType">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Cell" type="tns:CellType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DataSetType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Row" type="tns:RowType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="PPMessageResponse">
+        <xs:sequence>
+          <xs:element name="ResultCode" type="xs:string"/>
+          <xs:element name="ResultDesc" type="xs:string"/>
+          <xs:element name="TranID" type="tns:TranID"/>
+          <xs:element name="ServiceType">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="QUERY|CURSOR|VALUE|COMPLEX|UPDATE"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Result" type="xs:string"/>
+          <xs:element minOccurs="0" name="DataSet" type="tns:DataSetType"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="PPMessage">
+    <wsdl:part name="parameters" element="tns:PPMessage"/>
+  </wsdl:message>
+  <wsdl:message name="PPMessageResponse">
+    <wsdl:part name="parameters" element="tns:PPMessageResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="PPWebSv">
+    <wsdl:operation name="PPMessage">
+      <wsdl:input name="PPMessage" message="tns:PPMessage"/>
+      <wsdl:output name="PPMessageResponse" message="tns:PPMessageResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PPWebSvServiceSoapBinding" type="tns:PPWebSv">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="PPMessage">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="PPMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="PPMessageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PPWebSvService">
+    <wsdl:port name="PPWebSvPort" binding="tns:PPWebSvServiceSoapBinding">
+      <soap:address location="http://localhost:8080/services/PPWebSvService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

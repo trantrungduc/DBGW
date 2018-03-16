@@ -1,0 +1,19 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://soap.d.org/">
+   <soapenv:Body>
+        <PPMessageResponse>
+          	<ResultCode>0</ResultCode>
+			<ResultDesc>Success</ResultDesc>
+			<TranID>$trace_id</TranID>
+			<ServiceType>$serviceType</ServiceType>
+			<DataSet>
+				#foreach ($i in $result)
+				<Row>
+					#foreach ($j in $i.entrySet())
+					<Cell name="$!j.key">$!j.value</Cell>
+					#end
+				</Row>
+				#end
+			</DataSet>
+        </PPMessageResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

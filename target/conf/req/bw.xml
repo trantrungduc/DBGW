@@ -1,0 +1,12 @@
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:urn="urn:Webservice">
+	<soapenv:Header />
+	<soapenv:Body>
+		<urn:qosGetDataHighBWRemain
+			soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+			<in0 xsi:type="xsd:long">0</in0>
+			<in1 xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">$so_tb</in1>
+		</urn:qosGetDataHighBWRemain>
+	</soapenv:Body>
+</soapenv:Envelope>
