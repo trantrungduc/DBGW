@@ -27,6 +27,7 @@ public class HttpProcessThread implements Runnable {
 		this.resp = Resp;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void run() {
 		if (req.getRequestURI().equals("/status") && req.getMethod().equals(Method.GET)){
 			try {
@@ -108,7 +109,7 @@ public class HttpProcessThread implements Runnable {
 		        		break Return;
 		        	}
 		        	if (DBGW.props.getString("user."+user+".accept_ip")!=null && !DBGW.props.getString("user."+user+".accept_ip").contains(ip)){
-		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_ip"),"tpl","invalid_ip","body",body,"ip",ip);
+		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_ip"),"tpl","invalid_auth","body",body,"ip",ip);
 		        		break Return;
 		        	}
 		        	eBody = (Element)eBody.selectNodes("*").get(0);
@@ -116,6 +117,36 @@ public class HttpProcessThread implements Runnable {
 		        	String serviceType = DBGW.props.getString("sql."+service+".type");
 		        	if (serviceType==null){
 		        		serviceType="COMPLEX";
+		        	}
+		        	if (DBGW.props.getString("user."+user+".validate_script")!=null){
+		        		Binding bind = new Binding();
+		        		bind.setVariable("service", service);
+		        		bind.setVariable("serviceType", serviceType);
+		        		bind.setVariable("global",DBGW.global);
+		        		bind.setVariable("props",ConfigurationConverter.getMap(DBGW.props));
+		        		bind.setVariable("request", req);
+		        		bind.setVariable("trace_id",trace_id);
+		        		bind.setVariable("body",body);
+		        		Map<String,String> params = new HashMap<String,String>();
+		        		for (Object n:eBody.selectNodes("*")){
+		        			Element e = (Element)n;
+		        			params.put(e.getName(),e.getText());
+		        			bind.setVariable(e.getName(),e.getText());
+		        		}
+		        		bind.setVariable("ip",ip);
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|complex|"+System.currentTimeMillis()+"|"+params);
+		        		
+		            	Object call = DBGW.shell(bind, "/conf/script/"+DBGW.props.getString("user."+user+".validate_script")+".groovy");
+		        		if (call!=null && call instanceof Map){
+		        			Map<String,Object> call1 =(Map<String,Object>)call;
+		        			if (!(Boolean)call1.get("validate")){
+		        				ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_check"),"tpl","invalid_auth","body",body,"ip",ip,"valid",call);
+		        				break Return;
+		        			}
+		        		}else{
+		        			ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_check"),"tpl","invalid_auth","body",body,"ip",ip,"valid",call);
+	        				break Return;
+		        		}
 		        	}
 		        	
 		        	if (serviceType!=null && serviceType.equals("VALUE")){
