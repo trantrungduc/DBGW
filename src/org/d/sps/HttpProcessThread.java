@@ -77,6 +77,7 @@ public class HttpProcessThread implements Runnable {
 			}
 		}else if (req.getMethod().equals(Method.POST)){
 			String trace_id=String.valueOf(System.nanoTime());
+			String ip=DBGW.getIP(req);
 			RETURN ret = null;
 			try {
 				Return: {
@@ -87,23 +88,27 @@ public class HttpProcessThread implements Runnable {
 		        	List<Node> Header = DBGW.getNodes(body,"//*[local-name()='PPHeader']");
 		        	List<Node> Body = DBGW.getNodes(body,"//*[local-name()='PPBody']");
 		        	if (Header.size()==0 || Body.size()!=1){
-		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_req"),"tpl","invalid_req","body",body,"ip",DBGW.getIP(req));
+		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_req"),"tpl","invalid_req","body",body,"ip",ip);
 		        		break Return;
 		        	}
 		        	String user = DBGW.getXmlText(body,"//*[local-name()='PPHeader']/UserID");
 		        	String pass = DBGW.getXmlText(body,"//*[local-name()='PPHeader']/Password");
 		        	
 		        	if (user==null || pass==null){
-		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_req"),"tpl","invalid_req","body",body,"ip",DBGW.getIP(req));
+		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_req"),"tpl","invalid_req","body",body,"ip",ip);
 		        		break Return;
 		        	}
 		        	Element eBody = (Element)Body.get(0);
 		        	if (eBody.selectNodes("*").size()!=1){
-		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_req"),"tpl","invalid_req","body",body,"ip",DBGW.getIP(req));
+		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_req"),"tpl","invalid_req","body",body,"ip",ip);
 		        		break Return;
 		        	}
 		        	if (DBGW.props.getString("user."+user)==null || !DBGW.dec(DBGW.props.getString("user."+user)).equals(pass)){
-		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_auth"),"tpl","invalid_auth","body",body,"ip",DBGW.getIP(req));
+		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_auth"),"tpl","invalid_auth","body",body,"ip",ip);
+		        		break Return;
+		        	}
+		        	if (DBGW.props.getString("user."+user+".accept_ip")!=null && !DBGW.props.getString("user."+user+".accept_ip").contains(ip)){
+		        		ret = new RETURN("trace_id",trace_id,"result",DBGW.props.getString("msg.invalid_ip"),"tpl","invalid_ip","body",body,"ip",ip);
 		        		break Return;
 		        	}
 		        	eBody = (Element)eBody.selectNodes("*").get(0);
@@ -120,12 +125,12 @@ public class HttpProcessThread implements Runnable {
 		        			Element e = (Element)n;
 		        			params.put(e.getName(),e.getText());
 		        		}
-		        		params.put("ip",DBGW.getIP(req));
+		        		params.put("ip",ip);
 		        		sql = DBGW.eval(sql,params);
-		        		Logger.getLogger("sql").info(trace_id+"|value|"+System.currentTimeMillis()+"|"+sql);
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|value|"+System.currentTimeMillis()+"|"+sql);
 		        		String val = DBGW.utility.val(sql,null,DBGW.props.getString("sql."+service+".src"));
-		        		Logger.getLogger("sql").info(trace_id+"|value|result|"+System.currentTimeMillis()+"|"+val);
-		        		ret = new RETURN("serviceType",serviceType,"trace_id",trace_id,"result",StringEscapeUtils.escapeXml(val),"tpl","tpl_val","body",body,"ip",DBGW.getIP(req));
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|value|result|"+System.currentTimeMillis()+"|"+val);
+		        		ret = new RETURN("serviceType",serviceType,"trace_id",trace_id,"result",StringEscapeUtils.escapeXml(val),"tpl","tpl_val","body",body,"ip",ip);
 		        	}else if (serviceType!=null && serviceType.equals("UPDATE")){
 		        		String sql = DBGW.props.getString("sql."+service);
 		        		Map<String,String> params = new HashMap<String,String>();
@@ -133,12 +138,12 @@ public class HttpProcessThread implements Runnable {
 		        			Element e = (Element)n;
 		        			params.put(e.getName(),e.getText());
 		        		}
-		        		params.put("ip",DBGW.getIP(req));
+		        		params.put("ip",ip);
 		        		sql = DBGW.eval(sql,params);
-		        		Logger.getLogger("sql").info(trace_id+"|update|"+System.currentTimeMillis()+"|"+sql);
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|update|"+System.currentTimeMillis()+"|"+sql);
 		        		String val = DBGW.utility.update(sql,null,DBGW.props.getString("sql."+service+".src"));
-		        		Logger.getLogger("sql").info(trace_id+"|update|result|"+System.currentTimeMillis()+"|"+val);
-		        		ret = new RETURN("serviceType",serviceType,"trace_id",trace_id,"result",val,"tpl","tpl_val","body",body,"ip",DBGW.getIP(req));
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|update|result|"+System.currentTimeMillis()+"|"+val);
+		        		ret = new RETURN("serviceType",serviceType,"trace_id",trace_id,"result",val,"tpl","tpl_val","body",body,"ip",ip);
 		        	}else if (serviceType!=null && (serviceType.equals("QUERY")||serviceType.equals("CURSOR"))){
 		        		String sql = DBGW.props.getString("sql."+service);
 		        		Map<String,String> params = new HashMap<String,String>();
@@ -146,17 +151,17 @@ public class HttpProcessThread implements Runnable {
 		        			Element e = (Element)n;
 		        			params.put(e.getName(),e.getText());
 		        		}
-		        		params.put("ip",DBGW.getIP(req));
+		        		params.put("ip",ip);
 		        		sql = DBGW.eval(sql,params);
-		        		Logger.getLogger("sql").info(trace_id+"|rowset|"+System.currentTimeMillis()+"|"+sql);
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|rowset|"+System.currentTimeMillis()+"|"+sql);
 		        		List<Map<String,String>> res = null;
 		        		if (serviceType.equals("CURSOR")){
 		        			res = DBGW.utility.rf(sql,null,DBGW.props.getString("sql."+service+".src"));
 		        		}else{
 		        			res = DBGW.utility.qry(sql,null,DBGW.props.getString("sql."+service+".src"));
 		        		}
-		        		Logger.getLogger("sql").info(trace_id+"|rowset|result|"+System.currentTimeMillis()+"|"+res.toString().replace("\n","").replace("\r",""));
-		        		ret = new RETURN("serviceType",serviceType,"trace_id",trace_id,"result",res,"tpl","tpl_rowset","body",body,"ip",DBGW.getIP(req));
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|rowset|result|"+System.currentTimeMillis()+"|"+res.toString().replace("\n","").replace("\r",""));
+		        		ret = new RETURN("serviceType",serviceType,"trace_id",trace_id,"result",res,"tpl","tpl_rowset","body",body,"ip",ip);
 		        	}else{
 		        		Binding bind = new Binding();
 		        		bind.setVariable("service", service);
@@ -172,11 +177,11 @@ public class HttpProcessThread implements Runnable {
 		        			params.put(e.getName(),e.getText());
 		        			bind.setVariable(e.getName(),e.getText());
 		        		}
-		        		bind.setVariable("ip",DBGW.getIP(req));
-		        		Logger.getLogger("sql").info(trace_id+"|complex|"+System.currentTimeMillis()+"|"+params);
+		        		bind.setVariable("ip",ip);
+		        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|complex|"+System.currentTimeMillis()+"|"+params);
 		        		
 		            	Object call = DBGW.shell(bind, "/conf/script/"+service+".groovy");
-		            	Logger.getLogger("sql").info(trace_id+"|complex|result|"+System.currentTimeMillis()+"|"+call);
+		            	Logger.getLogger("sql").info(trace_id+"|"+ip+"|complex|result|"+System.currentTimeMillis()+"|"+call);
 						
 						if (call instanceof RETURN){
 							ret = (RETURN)call;
@@ -188,6 +193,7 @@ public class HttpProcessThread implements Runnable {
 	        	resp.getWriter().write(ret.toString());
 	        } catch (Exception e) {
 	        	try {
+	        		Logger.getLogger("sql").info(trace_id+"|"+ip+"|exception|"+System.currentTimeMillis()+"|"+e.getMessage());
 	        		ret = new RETURN("serviceType","COMPLEX","trace_id",trace_id,"result",e.getMessage(),"body",e.getMessage(),"tpl","exception");
 		        	resp.getWriter().write(ret.toString());
 				} catch (IOException e1) {}
