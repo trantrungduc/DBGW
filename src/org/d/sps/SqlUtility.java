@@ -38,7 +38,7 @@ public class SqlUtility {
 		System.out.println(getParamFromSql("begin ?:= crud.change_password('$!user_id','$!password1','$!password2'); end;"));
 		DBGW.textEncryptor.setPassword("vnptnet_modular_encrypt");
 		
-		System.out.println(DBGW.enc("hpgapi#qawsed"));
+		System.out.println(DBGW.enc("hpgapi#qawsed13424"));
 		System.out.println(DBGW.dec("pXOQ6RLBYONhxZM01f3TqcVVIRbXP/JueL9KbEHfaYk="));
 	}
 	

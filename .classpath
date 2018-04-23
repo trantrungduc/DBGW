@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="target/lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="target/lib/commons-configuration-1.9.jar"/>
 	<classpathentry kind="lib" path="target/lib/commons-io-2.3.jar"/>
@@ -33,5 +32,6 @@
 	<classpathentry kind="lib" path="target/lib/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="target/lib/metadata-extractor-2.10.1.jar"/>
 	<classpathentry kind="lib" path="target/lib/commons-net-3.5.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
